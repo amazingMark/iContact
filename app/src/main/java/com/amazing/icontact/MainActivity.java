@@ -1,12 +1,14 @@
 package com.amazing.icontact;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.amazing.icontact.data.DataManager;
+import com.amazing.icontact.view.MainFragmentPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import butterknife.BindView;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_tab_layout) TabLayout viewTab;
     @BindView(R.id.main_view_pager) ViewPager2 viewPager;
 
+    FragmentStateAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +30,40 @@ public class MainActivity extends AppCompatActivity {
         DataManager.getInstance().prepareContacts(this);
         Log.e("prepare", "contacts size is " + DataManager.getInstance().getContacts().size());
 
-
         ButterKnife.bind(this);
         initViews();
     }
 
     //初始化tab和列表
     private void initViews() {
+
+        mAdapter = new MainFragmentPagerAdapter(this);
+        viewPager.setAdapter(mAdapter);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                viewTab.setScrollPosition(position, 0, false);
+            }
+        });
         viewTab.addTab(viewTab.newTab().setText(R.string.tab_records));
         viewTab.addTab(viewTab.newTab().setText(R.string.tab_contacts));
         viewTab.addTab(viewTab.newTab().setText(R.string.tab_setting));
+        viewTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-        
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }
