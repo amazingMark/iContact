@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">iContact</string>
+    <string name="need_permission">！需要赋予权限才能为您服务,请到设置页面修改权限</string>
+    <string name="tab_records">通话记录</string>
+    <string name="tab_contacts">联系人</string>
+    <string name="tab_setting">设置</string>
+</resources>
